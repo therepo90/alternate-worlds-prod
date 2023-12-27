@@ -6,9 +6,9 @@ precision mediump float;
 varying vec2 vUV;
 uniform sampler2D textureSampler;
 uniform sampler2D iChannel0;
+//uniform sampler2D iChannel1;
 uniform vec2 mouse;
 uniform vec2 iResolution;
-uniform float noktoFactor;
 
 void mainImage(out vec4 f, in vec2 w)
 {
@@ -39,7 +39,11 @@ void mainImage(out vec4 f, in vec2 w)
     } */
     //lettersResult.a *= noktoFactor;
 
-    f = mix(bgTextureColor, lettersTextureColor, lettersTextureColor.a * spotlight);
+    vec4 finalColor = mix(bgTextureColor, lettersTextureColor, lettersTextureColor.a * spotlight);
+    //vec4 wallText = texture2D(iChannel1, u);
+    //finalColor=mix(finalColor, wallText, wallText.a * spotlight);
+    //finalColor = wallText;
+    f = finalColor;
     //f = lettersTextureColor;
     //f = lettersResult;
 }

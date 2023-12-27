@@ -4,8 +4,10 @@ precision mediump float;
 
 varying vec2 vUV;
 uniform sampler2D iChannel0;
+uniform sampler2D iChannel1;
 uniform vec2 mouse;
 uniform vec2 iResolution;
+uniform float iTime; // seconds
 
 void mainImage(out vec4 f, in vec2 w)
 {
@@ -31,8 +33,17 @@ void mainImage(out vec4 f, in vec2 w)
     vec4 textureColor = texture2D(iChannel0, u);
     vec3 finalColor = mix(textureColor.rgb * 0.6, textureColor.rgb + mix(backgroundColor, textureColor.rgb, 0.8) * 0.1, spotlight *5.0);
 
-    // Set the alpha value from the texture
-    f = vec4(finalColor, textureColor.a);
+   vec4 eyesTex = texture2D(iChannel1, u);
+
+//if(iTime > 20.0){
+   float freq = 0.01;
+   float pulseStrength = abs(fract(iTime * freq));
+   float intensity = smoothstep(0.7, 0.85, pulseStrength) - smoothstep(0.85, 1.0, pulseStrength);
+//}
+   vec3 eyesCol = eyesTex.rgb * eyesTex.a * intensity * vec3(1.0,0.0,0.0);
+   finalColor+=eyesCol;
+     f = vec4(finalColor, textureColor.a);
+    //f = vec4(1.0,0.0,0.0,1.0) * intensity;
 }
 
 void main()
